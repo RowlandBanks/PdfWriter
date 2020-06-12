@@ -15,6 +15,7 @@ namespace PdfWriter.Host
         private readonly Document _document;
         private readonly Section _section;
         private Paragraph _paragraph;
+        private TextFormat _currentTextFormat;
 
         static PdfDocumentWriter()
         {
@@ -42,7 +43,18 @@ namespace PdfWriter.Host
 
         public void SetFontStyle(FontStyle fontStyle)
         {
-            throw new NotImplementedException();
+            if (fontStyle.HasFlag(FontStyle.Bold))
+            {
+                _currentTextFormat = _currentTextFormat | TextFormat.Bold;
+            }
+            else if (fontStyle.HasFlag(FontStyle.Italic))
+            {
+                _currentTextFormat = _currentTextFormat | TextFormat.Italic;
+            }
+            else if (fontStyle == FontStyle.NoStyle)
+            {
+                _currentTextFormat = 0;
+            }
         }
 
         public void SetParagraphAlignment(ParagraphAlignment paragraphAlignment)
@@ -57,7 +69,7 @@ namespace PdfWriter.Host
 
         public void Write(string text)
         {
-            _paragraph.AddFormattedText(text);
+            _paragraph.AddFormattedText(text, _currentTextFormat);
         }
 
         public void Complete()
