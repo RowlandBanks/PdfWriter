@@ -19,6 +19,7 @@ namespace PdfWriter.Host
         private Paragraph _paragraph;
         private TextFormat _currentTextFormat;
         private int _currentFontSize = NormalFontSize;
+        private Unit _currentIndent = new Unit(0);
 
         static PdfDocumentWriter()
         {
@@ -36,7 +37,8 @@ namespace PdfWriter.Host
 
         public void ChangeIndent(int delta)
         {
-            throw new NotImplementedException();
+            _currentIndent += new Unit(delta, UnitType.Centimeter);
+            _paragraph.Format.LeftIndent = _currentIndent;
         }
 
         public void SetFontSize(FontSize fontSize)
@@ -72,8 +74,10 @@ namespace PdfWriter.Host
         public void StartNewParagraph()
         {
             _paragraph = _section.AddParagraph();
+
             _paragraph.Format.SpaceAfter = new Unit(1, UnitType.Centimeter);
             _paragraph.Format.Font.Size = _currentFontSize;
+            _paragraph.Format.LeftIndent += _currentIndent;
         }
 
         public void Write(string text)
