@@ -22,14 +22,22 @@ namespace PdfWriter.Host
                 while (!reader.EndOfStream)
                 {
                     var nextLine = reader.ReadLine();
-                    ProcessLine(nextLine);
+                    ProcessLine(writer, nextLine);
                 }
             }
         }
 
-        private void ProcessLine(string nextLine)
+        private void ProcessLine(IDocumentWriter writer, string nextLine)
         {
-            throw new NotImplementedException();
+            if (nextLine.StartsWith("."))
+            {
+                // This is a control statement. Process it appropriately.
+            }
+            else
+            {
+                // This is just text - write it.
+                writer.Write(nextLine);
+            }
         }
     }
 }
