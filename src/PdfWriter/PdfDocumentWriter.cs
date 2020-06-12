@@ -59,7 +59,7 @@ namespace PdfWriter.Host
 
         public void SetParagraphAlignment(ParagraphAlignment paragraphAlignment)
         {
-            throw new NotImplementedException();
+            _paragraph.Format.Alignment = GetParagraphAlignment(paragraphAlignment);
         }
 
         public void StartNewParagraph()
@@ -80,6 +80,18 @@ namespace PdfWriter.Host
 
             // Save the document...
             pdfRenderer.PdfDocument.Save(_output);
+        }
+
+        private MigraDoc.DocumentObjectModel.ParagraphAlignment GetParagraphAlignment(ParagraphAlignment paragraphAlignment)
+        {
+            if (paragraphAlignment == ParagraphAlignment.Justified)
+            {
+                return MigraDoc.DocumentObjectModel.ParagraphAlignment.Justify;
+            }
+            else
+            {
+                return MigraDoc.DocumentObjectModel.ParagraphAlignment.Left;
+            }
         }
     }
 }

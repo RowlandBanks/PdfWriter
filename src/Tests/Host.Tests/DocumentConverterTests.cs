@@ -150,6 +150,21 @@ namespace PdfWriter.Host.Tests
         }
 
         [Fact]
+        public void ConverterStartsNewParagraph()
+        {
+            var input = ".paragraph";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
+                writer.Received(1).StartNewParagraph();
+            }
+        }
+
+        [Fact]
         public void ConverterSetsParagraphAlignmentJustified()
         {
             var input = ".fill";

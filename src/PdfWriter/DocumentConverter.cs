@@ -67,6 +67,10 @@ namespace PdfWriter.Host
                 {
                     writer.SetParagraphAlignment(ParagraphAlignment.LeftAlign);
                 }
+                else if (line.StartsWith(".paragraph"))
+                {
+                    writer.StartNewParagraph();
+                }
                 else if (line.StartsWith(".indent"))
                 {
                     // Parse out the indent value.
