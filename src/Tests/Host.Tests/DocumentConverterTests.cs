@@ -42,6 +42,23 @@ namespace PdfWriter.Host.Tests
             }
         }
 
+        [Theory]
+        [InlineData("\r\n")]
+        [InlineData("\n")]
+        [InlineData("   \n")]
+        [InlineData("   \r\n")]
+        public void ConverterIgnoresBlankLines(string input)
+        {
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).Complete();
+            }
+        }
+
         [Fact]
         public void ConverterWritesText()
         {

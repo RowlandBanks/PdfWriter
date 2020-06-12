@@ -29,43 +29,48 @@ namespace PdfWriter.Host
             }
         }
 
-        private void ProcessLine(IDocumentWriter writer, string nextLine)
+        private void ProcessLine(IDocumentWriter writer, string line)
         {
-            if (nextLine.StartsWith("."))
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                return;
+            }
+
+            if (line.StartsWith("."))
             {
                 // This is a control statement. Process it appropriately.
-                if (nextLine.StartsWith(".bold"))
+                if (line.StartsWith(".bold"))
                 {
                     writer.SetFontStyle(FontStyle.Bold);
                 }
-                else if (nextLine.StartsWith(".italic"))
+                else if (line.StartsWith(".italic"))
                 {
                     writer.SetFontStyle(FontStyle.Italic);
                 }
-                else if (nextLine.StartsWith(".regular"))
+                else if (line.StartsWith(".regular"))
                 {
                     writer.SetFontStyle(FontStyle.NoStyle);
                 }
-                else if (nextLine.StartsWith(".large"))
+                else if (line.StartsWith(".large"))
                 {
                     writer.SetFontSize(FontSize.Large);
                 }
-                else if (nextLine.StartsWith(".normal"))
+                else if (line.StartsWith(".normal"))
                 {
                     writer.SetFontSize(FontSize.Normal);
                 }
-                else if (nextLine.StartsWith(".fill"))
+                else if (line.StartsWith(".fill"))
                 {
                     writer.SetParagraphAlignment(ParagraphAlignment.Justified);
                 }
-                else if (nextLine.StartsWith(".nofill"))
+                else if (line.StartsWith(".nofill"))
                 {
                     writer.SetParagraphAlignment(ParagraphAlignment.LeftAlign);
                 }
-                else if (nextLine.StartsWith(".indent"))
+                else if (line.StartsWith(".indent"))
                 {
                     // Parse out the indent value.
-                    var indentValue = nextLine.Substring(7).Trim();
+                    var indentValue = line.Substring(7).Trim();
                     if (int.TryParse(indentValue, out var indent))
                     {
                         writer.ChangeIndent(indent);
@@ -77,13 +82,13 @@ namespace PdfWriter.Host
                 }
                 else
                 {
-                    throw new Exception($"Unrecognized control statement '{nextLine}'");
+                    throw new Exception($"Unrecognized control statement '{line}'");
                 }
             }
             else
             {
                 // This is just text - write it.
-                writer.Write(nextLine);
+                writer.Write(line);
             }
         }
     }
