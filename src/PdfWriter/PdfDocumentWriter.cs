@@ -11,11 +11,14 @@ namespace PdfWriter.Host
     /// </summary>
     public class PdfDocumentWriter : IDocumentWriter
     {
+        private static readonly int LargeFontSize = 28;
+        private static readonly int NormalFontSize = 12;
         private readonly Stream _output;
         private readonly Document _document;
         private readonly Section _section;
         private Paragraph _paragraph;
         private TextFormat _currentTextFormat;
+        private int _currentFontSize = NormalFontSize;
 
         static PdfDocumentWriter()
         {
@@ -38,7 +41,11 @@ namespace PdfWriter.Host
 
         public void SetFontSize(FontSize fontSize)
         {
-            throw new NotImplementedException();
+            _currentFontSize = fontSize == FontSize.Large ?
+                    LargeFontSize :
+                    NormalFontSize;
+
+            _paragraph.Format.Font.Size = _currentFontSize;
         }
 
         public void SetFontStyle(FontStyle fontStyle)
@@ -65,6 +72,8 @@ namespace PdfWriter.Host
         public void StartNewParagraph()
         {
             _paragraph = _section.AddParagraph();
+            _paragraph.Format.SpaceAfter = new Unit(1, UnitType.Centimeter);
+            _paragraph.Format.Font.Size = _currentFontSize;
         }
 
         public void Write(string text)
