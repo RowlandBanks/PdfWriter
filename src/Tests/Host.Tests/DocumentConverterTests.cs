@@ -39,8 +39,153 @@ namespace PdfWriter.Host.Tests
                 // Prove we received exactly 1 call, to Write.
                 Single(writer.ReceivedCalls());
                 writer.Received(1).Write(input);
-                writer.ReceivedWithAnyArgs(1).Write(default);
             }
+        }
+
+        [Fact]
+        public void ConverterSetsFontSizeLarge()
+        {
+            var input = ".large";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).SetFontSize(FontSize.Large);
+            }
+        }
+
+        [Fact]
+        public void ConverterSetsFontSizeNormal()
+        {
+            var input = ".normal";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).SetFontSize(FontSize.Normal);
+            }
+        }
+
+        [Fact]
+        public void ConverterSetsBold()
+        {
+            var input = ".bold";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).SetFontStyle(FontStyle.Bold);
+            }
+        }
+
+        [Fact]
+        public void ConverterSetsItalics()
+        {
+            var input = ".italics";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).SetFontStyle(FontStyle.Italic);
+            }
+        }
+
+        [Fact]
+        public void ConverterSetsRegular()
+        {
+            var input = ".regular";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).SetFontStyle(FontStyle.NoStyle);
+            }
+        }
+
+        [Fact]
+        public void ConverterSetsParagraphAlignmentJustified()
+        {
+            var input = ".fill";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).SetParagraphAlignment(ParagraphAlignment.Justified);
+            }
+        }
+
+        [Fact]
+        public void ConverterSetsParagraphAlignmentLeftAlign()
+        {
+            var input = ".nofill";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).SetParagraphAlignment(ParagraphAlignment.LeftAlign);
+            }
+        }
+
+        [Fact]
+        public void ConverterThrowsOnUnrecognizedControlStatement()
+        {
+            var input = ".not_real";
+
+            var exception = Throws<Exception>(() => Act(input, null));
+            Equal("Unrecognized control statement '.not_real'", exception.Message);
+        }
+
+        [Theory]
+        [InlineData("+0", 0)]
+        [InlineData("0", 0)]
+        [InlineData("-0", 0)]
+        [InlineData("1", 1)]
+        [InlineData("+1", 1)]
+        [InlineData("-1", -1)]
+        [InlineData(" +1", 1)]
+        public void ConverterSetsIndent(string indent, int expected)
+        {
+            var input = ".indent " + indent;
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).ChangeIndent(expected);
+            }
+        }
+
+        [Fact]
+        public void ConverterThrowsOnInvalidIndentValue()
+        {
+            var input = ".indent invalid";
+
+            var exception = Throws<Exception>(() => Act(input, null));
+
+            Equal("Invalid indent value 'invalid'", exception.Message);
         }
 
         private void Act(string input, Action<IDocumentWriter> assert)
