@@ -10,8 +10,6 @@ namespace PdfWriter.Host
     /// </summary>
     public interface IDocumentWriter
     {
-        void Initialize(Stream output);
-
         /// <summary>
         /// Writes <paramref name="text"/> to the output stream.
         /// </summary>

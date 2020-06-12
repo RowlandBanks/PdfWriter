@@ -1,19 +1,21 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace PdfWriter.Host
 {
     /// <summary>
-    /// Implements a <see cref="IDocumentWriter" /> that uses 
+    /// Implements a <see cref="IDocumentWriter" /> that uses PdfSharp to write the document.
     /// </summary>
     public class PdfDocumentWriter : IDocumentWriter
     {
-        public void ChangeIndent(int delta)
+        private readonly Stream _output;
+
+        public PdfDocumentWriter(Stream output)
         {
-            throw new NotImplementedException();
+            _output = output ?? throw new ArgumentNullException(nameof(output));
         }
 
-        public void Initialize(Stream output)
+        public void ChangeIndent(int delta)
         {
             throw new NotImplementedException();
         }
