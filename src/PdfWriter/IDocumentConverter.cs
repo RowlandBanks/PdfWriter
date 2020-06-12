@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 
 namespace Host
 {
@@ -10,8 +10,13 @@ namespace Host
         /// <summary>
         /// Converts <paramref name="input"/> into a new document.
         /// </summary>
-        /// <param name="input"></param>
+        /// <remarks>
+        /// Note that the caller is responsible for closing the <paramref name="input"/> and
+        /// <paramref name="output"/> streams.
+        /// </remarks>
+        /// <param name="input">The input stream</param>
+        /// <param name="output">The output stream</param>
         /// <returns>A stream representing the output document.</returns>
-        Stream Write(Stream input);
+        void Convert(Stream input, Stream output);
     }
 }

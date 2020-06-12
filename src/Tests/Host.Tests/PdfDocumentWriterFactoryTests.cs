@@ -8,7 +8,7 @@ namespace PdfWriter.Host.Tests
         [Fact]
         public void CreateReturnsPdfDocumentWriter()
         {
-            // Background: Proves that
+            // Background: Proves that the factory returns an instance of the correct type.
             // Arrange
             var factory = new PdfDocumentWriterFactory();
 
