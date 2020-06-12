@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 using NSubstitute;
+using NSubstitute.Core;
 using Xunit;
 using static Xunit.Assert;
 
@@ -28,6 +28,21 @@ namespace PdfWriter.Host.Tests
         }
 
         [Fact]
+        public void ConverterCallsComplete()
+        {
+            var input = "";
+
+            Act(input, Assert);
+
+            void Assert(IDocumentWriter writer)
+            {
+                // Prove we received exactly 1 call, to Write.
+                Single(writer.ReceivedCalls());
+                writer.Received(1).Complete();
+            }
+        }
+
+        [Fact]
         public void ConverterWritesText()
         {
             var input = "Hello world";
@@ -37,7 +52,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).Write(input);
             }
         }
@@ -52,7 +67,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).SetFontSize(FontSize.Large);
             }
         }
@@ -67,7 +82,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).SetFontSize(FontSize.Normal);
             }
         }
@@ -82,7 +97,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).SetFontStyle(FontStyle.Bold);
             }
         }
@@ -97,7 +112,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).SetFontStyle(FontStyle.Italic);
             }
         }
@@ -112,7 +127,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).SetFontStyle(FontStyle.NoStyle);
             }
         }
@@ -127,7 +142,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).SetParagraphAlignment(ParagraphAlignment.Justified);
             }
         }
@@ -142,7 +157,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).SetParagraphAlignment(ParagraphAlignment.LeftAlign);
             }
         }
@@ -173,7 +188,7 @@ namespace PdfWriter.Host.Tests
             void Assert(IDocumentWriter writer)
             {
                 // Prove we received exactly 1 call, to Write.
-                Single(writer.ReceivedCalls());
+                Single(writer.ReceivedCalls().Where(NotCompleteMethod));
                 writer.Received(1).ChangeIndent(expected);
             }
         }
@@ -208,6 +223,11 @@ namespace PdfWriter.Host.Tests
             converter.Convert(inputStream, outputStream);
 
             assert(writer);
+        }
+
+        private static bool NotCompleteMethod(ICall call)
+        {
+            return call.GetMethodInfo().Name != "Complete";
         }
     }
 }

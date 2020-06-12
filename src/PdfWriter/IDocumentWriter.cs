@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -45,7 +45,16 @@ namespace PdfWriter.Host
         /// <remarks>
         /// Supply a negative number to reduce the indentation level.
         /// </remarks>
-        /// <param name="delta"></param>
+        /// <param name="delta">The change to the current indent value</param>
         void ChangeIndent(int delta);
+
+        /// <summary>
+        /// Notifies this implementation that the document is complete.
+        /// </summary>
+        /// <remarks>
+        /// This method permits implementing classes to, for example, flush the stream,
+        /// or write end tags, or similar activities.
+        /// </remarks>
+        void Complete();
     }
 }

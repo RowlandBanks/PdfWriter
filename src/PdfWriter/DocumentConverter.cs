@@ -24,6 +24,8 @@ namespace PdfWriter.Host
                     var nextLine = reader.ReadLine();
                     ProcessLine(writer, nextLine);
                 }
+
+                writer.Complete();
             }
         }
 
