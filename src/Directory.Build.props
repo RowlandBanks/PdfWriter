@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup Label="Configure assembly names and namespaces">
+    <AssemblyName>PdfWriter.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>$(AssemblyName)</RootNamespace>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+</Project>
